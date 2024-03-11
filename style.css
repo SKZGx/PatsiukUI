@@ -11,8 +11,8 @@ html{
 }
 
 .UI, .calc{
-    min-width: 600px;
-    min-height: 600px;
+    min-width: 650px;
+    min-height: 650px;
     margin: 10px;
 }
 
@@ -48,6 +48,7 @@ html{
     flex-wrap: wrap;
     gap: 5px;
     align-content: center;
+    padding: 5px;
 }
 
 .UI {
