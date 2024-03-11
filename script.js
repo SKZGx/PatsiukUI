@@ -124,12 +124,12 @@ function addStoredItemToUI(item) {
                 <div class="itemimage" style="background-image: url('${item.image}');"></div>
             </div>
             <div class="infocont">
-            <div class="title">${item.title}</div>
-            <div class="statuscont">
-                <div class="translated" style="width: ${item.translated}%;"></div>
-                <div class="approved" style="width: ${item.approved}%;"></div>
-                <div class="percentage">${item.translated}% ✏️ ${item.approved}% ✅</div>
-            </div>
+                <div class="title">${item.title}</div>
+                <div class="statuscont">
+                    <div class="translated" style="width: ${item.translated}%;"></div>
+                    <div class="approved" style="width: ${item.approved}%;"></div>
+                    <div class="percentage">${item.translated}% ✏️ ${item.approved}% ✅</div>
+                </div>
             </div>
         </div>
     `;
@@ -146,26 +146,31 @@ function addStoredItemToUI(item) {
                 </div>
                 <div>${item.title}</div>
             </div>
-            <input type="number" class="approved-input" value="${item.approved}" placeholder="Approved">
-            <input type="number" class="translated-input" value="${item.translated}" placeholder="Translated">
+            <input type="number" class="approved-input" value="${item.approved}" placeholder="Approved" onchange="updateMemoryValues('${item.id}', 'approved', this.value)">
+            <input type="number" class="translated-input" value="${item.translated}" placeholder="Translated" onchange="updateMemoryValues('${item.id}', 'translated', this.value)">
         </div>
     `;
 
-
     // Append the remove button to the "removeobj" div using innerHTML
     document.querySelector('.removeobj').innerHTML += removeButtonHTML;
+}
 
-    // Add event listeners to update values in real-time
-    var approvedInput = document.querySelector(`#${item.id} .approved-input`);
-    var translatedInput = document.querySelector(`#${item.id} .translated-input`);
-
-    approvedInput.addEventListener('input', function () {
-        updateItemValues(item.id, translatedInput.value, this.value);
+function updateMemoryValues(itemId, field, value) {
+    // Update values in the local storage
+    var storedItems = JSON.parse(localStorage.getItem('storedItems')) || [];
+    var updatedItems = storedItems.map(function (item) {
+        if (item.id === itemId) {
+            return { ...item, [field]: value };
+        }
+        return item;
     });
 
-    translatedInput.addEventListener('input', function () {
-        updateItemValues(item.id, this.value, approvedInput.value);
-    });
+    // Save the updated array back to local storage
+    localStorage.setItem('storedItems', JSON.stringify(updatedItems));
+
+    // Update values in the UI
+    $(`#${itemId} .${field}`).css('width', `${value}%`);
+    $(`#${itemId} .percentage`).html(`${updatedItems.find(item => item.id === itemId).translated}% ✏️ ${updatedItems.find(item => item.id === itemId).approved}% ✅`);
 }
 
 function updateItemValues(itemId, translated, approved) {
