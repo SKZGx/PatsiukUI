@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PatsiukUI</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="footer.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>    <script src="script.js"></script>
+    <link rel="stylesheet" href="twemoji-amazing.css">
+</head>
+<body>
+    <div class="CContainer">
+    <div class="container">
+
+        <div class="calc">
+            <form id="form">
+                <label for="title">Назва:</label>
+                <input type="text" id="title" name="title" required>
+
+                <label for="itemimage">Посилання на зображення:</label>
+                <input type="text" id="itemimage" name="itemimage" required>
+
+                <label for="translated">🖍 Перекладено:</label>
+                <input type="number" min="0" max="100" id="translated" name="translated" required>
+
+                <label for="approved">✅ Затверджено:</label>
+                <input type="number" min="0" max="100" id="approved" name="approved" required>
+
+                <button type="button" onclick="addItem()">Додати новий елемент</button>
+            </form>
+            <div class="removeobj">
+
+            </div>
+        </div>
+        <div id="uiContainer" class="UI">
+            <div id="images" class="images">
+        </div>
+
+    </div>
+ 
+    </div>
+    <div class="capture">
+        <button onclick="captureScreenshotWithDomToImage()">Зробити знімок</button>
+    </div>
+    <canvas id="filterCanvas"></canvas>
+    <div class="footer">
+        <div class="footertext">
+          <div class="infotext">© 2024 Patsiuk Localizator</div>
+          <div class="infotext">Створив <a href="https://megatrex4.netlify.app/">MEGATREX4</a> з 💜 до вас</div>
+        </div>
+    </div>
+    <script>
+	    twemoji.parse(document.body)
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SebastianAigner/twemoji-amazing/twemoji-amazing.css">
+</body>
+</html>
