@@ -23,8 +23,9 @@ html{
 }
 
 .background{
-    width: 500px;
-    min-height: 500px;
+    width: 512px;
+    min-width: 512px;
+    min-height: 512px;
     position: absolute;
     z-index: -2;
 }
