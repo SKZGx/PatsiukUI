@@ -36,8 +36,13 @@ function addItem() {
     // Reset form fields
     $('#form')[0].reset();
 
-    twemoji.parse(document.body);
+   
 }
+
+$('.removeobj').on('click', '.removebtn', function () {
+    var itemId = $(this).data('itemid');
+    removeItem(itemId);
+});
 
 function removeItem(itemId) {
     // Remove the corresponding remove button from removeobj
@@ -85,7 +90,7 @@ function storeItemInLocalStorage(item) {
 
     // Save the updated array back to local storage
     localStorage.setItem('storedItems', JSON.stringify(storedItems));
-    twemoji.parse(document.body);
+   
 }
 
 function loadItemsFromLocalStorage() {
@@ -96,7 +101,7 @@ function loadItemsFromLocalStorage() {
     storedItems.forEach(function (item) {
         addStoredItemToUI(item);
     });
-    twemoji.parse(document.body);
+   
 }
 
 function removeItemFromLocalStorage(itemId) {
@@ -108,7 +113,7 @@ function removeItemFromLocalStorage(itemId) {
 
     // Save the updated array back to local storage
     localStorage.setItem('storedItems', JSON.stringify(updatedItems));
-    twemoji.parse(document.body);
+   
 }
 
 function addStoredItemToUI(item) {
@@ -122,7 +127,7 @@ function addStoredItemToUI(item) {
             <div class="statuscont">
                 <div class="translated" style="width: ${item.translated}%;"></div>
                 <div class="approved" style="width: ${item.approved}%;"></div>
-                <div class="percentage">${item.translated}% 🖍 ${item.approved}% ✅</div>
+                <div class="percentage">${item.translated}% ✏️ ${item.approved}% ✅</div>
             </div>
         </div>
     `;
@@ -130,16 +135,53 @@ function addStoredItemToUI(item) {
     // Append the new item to the "images" div using innerHTML
     document.getElementById('images').innerHTML += newItemHTML;
 
-    // Create the HTML content for the remove button
+    // Create the HTML content for the remove button with input fields
     var removeButtonHTML = `
         <div class="removecont" id="${item.id}">
-            <div class="removebtn" data-itemid="${item.id}" onclick="removeItem('${item.id}')" title="remove"> 🗑${item.title}</div>
+            <div class=removetextcont>
+                <div class="removebtn" data-itemid="${item.id}" title="remove" onclick="removeItem('${item.id}')">
+                    <i class="emoji em-delete"></i>
+                </div>
+                <div>${item.title}</div>
+            </div>
+            <input type="number" class="approved-input" value="${item.approved}" placeholder="Approved">
+            <input type="number" class="translated-input" value="${item.translated}" placeholder="Translated">
         </div>
     `;
+
 
     // Append the remove button to the "removeobj" div using innerHTML
     document.querySelector('.removeobj').innerHTML += removeButtonHTML;
 
-    // Parse twemoji after adding elements
-    twemoji.parse(document.body);
+    // Add event listeners to update values in real-time
+    var approvedInput = document.querySelector(`#${item.id} .approved-input`);
+    var translatedInput = document.querySelector(`#${item.id} .translated-input`);
+
+    approvedInput.addEventListener('input', function () {
+        updateItemValues(item.id, translatedInput.value, this.value);
+    });
+
+    translatedInput.addEventListener('input', function () {
+        updateItemValues(item.id, this.value, approvedInput.value);
+    });
 }
+
+function updateItemValues(itemId, translated, approved) {
+    // Update values in the UI
+    $(`#${itemId} .translated`).css('width', `${translated}%`);
+    $(`#${itemId} .approved`).css('width', `${approved}%`);
+    $(`#${itemId} .percentage`).html(`${translated}% ✏️ ${approved}% ✅`);
+
+    // Update values in the local storage
+    var storedItems = JSON.parse(localStorage.getItem('storedItems')) || [];
+    var updatedItems = storedItems.map(function (item) {
+        if (item.id === itemId) {
+            return { ...item, translated, approved };
+        }
+        return item;
+    });
+
+    // Save the updated array back to local storage
+    localStorage.setItem('storedItems', JSON.stringify(updatedItems));
+}
+
