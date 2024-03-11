@@ -11,6 +11,7 @@ html{
 }
 
 .UI, .calc{
+    width: 650px;
     min-width: 650px;
     min-height: 650px;
     margin: 10px;
@@ -75,6 +76,7 @@ html{
     height: 50px;
     background-size: contain;
     border-radius: 0.5rem;
+    background-size: cover;
 }
 
 form {
