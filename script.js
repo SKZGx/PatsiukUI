@@ -122,12 +122,14 @@ function addStoredItemToUI(item) {
         <div id="${item.id}" class="itemcontainer">
             <div class="itemtitlecont">
                 <div class="itemimage" style="background-image: url('${item.image}');"></div>
-                <div class="title">${item.title}</div>
             </div>
+            <div class="infocont">
+            <div class="title">${item.title}</div>
             <div class="statuscont">
                 <div class="translated" style="width: ${item.translated}%;"></div>
                 <div class="approved" style="width: ${item.approved}%;"></div>
                 <div class="percentage">${item.translated}% ✏️ ${item.approved}% ✅</div>
+            </div>
             </div>
         </div>
     `;

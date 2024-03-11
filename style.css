@@ -52,6 +52,14 @@ html{
     padding: 10px;
 }
 
+.infocont {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-left: 5px;;
+}
+
+
 .UI {
     position: relative;
     background-image: url(https://i.imgur.com/ukZ8NJu.png);
@@ -71,9 +79,9 @@ html{
 }
 
 .itemimage{
-    width: 50px;
-    min-width: 50px;
-    height: 50px;
+    width: 100px;
+    min-width: 100px;
+    height: 100px;
     background-size: contain;
     border-radius: 0.5rem;
     background-size: cover;
@@ -91,11 +99,11 @@ input{
 }
 
 .itemcontainer {
-    width: 200px;
+    width: 250px;
     display: flex;
     padding: 10px;
     border-radius: 0.5rem;
-    flex-direction: column;
+    flex-direction: row;
     min-height: 100px;
     padding-bottom: 12px;
     backdrop-filter: blur(16px) saturate(180%);
@@ -103,6 +111,8 @@ input{
     background-color: #26292fcc;
     border-radius: 12px;
     border: 1px solid rgba(51, 51, 51, 0.125);
+    align-items: center;
+    align-content: center;
 }
 
 .itemtitlecont{
@@ -129,7 +139,7 @@ input{
 .statuscont, .approved, .translated{
     height: 20px;
     border-radius: 0.3rem;
-    margin: 5px 0 10px 0;
+    margin: 5px 0 30px 0;
 }
 
 .approved, .translated{
