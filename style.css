@@ -82,9 +82,9 @@ html{
     width: 100px;
     min-width: 100px;
     height: 100px;
-    background-size: contain;
+    background-size: cover !important;
     border-radius: 0.5rem;
-    background-size: cover;
+    
 }
 
 form {
@@ -100,7 +100,7 @@ input{
 
 
 .itemcontainer {
-    width: 250px;
+    width: 270px;
     display: flex;
     padding: 10px;
     flex-direction: row;
