@@ -7,17 +7,45 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="switch.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>    
     <script src="script.js"></script>
-    <link rel="stylesheet" href="twemoji-amazing.css">
     <link rel="icon" type=" image/x-icon" href="https://i.imgur.com/SKrJdrU.png">
-
 </head>
 <body>
     <div class="CContainer">
     <div class="container">
-
         <div class="calc">
+            <div id="ShowSiteSettings" class="ShowSiteSettings"></div>
+            <form id="SiteSettingsForm" class="SiteSettings">
+                <div class="slidercont">
+                    <div>ЦЕ БЕТА ТОМУ НЕ ТРЕБА ДИВУВАТИСЬ ЩО<br>ЩОСЬ НЕ ЗАПАМ'ЯТАЛОСЬ БРАУЗЕРОМ<br></div>
+                    <div class="togglecontainertext"><br>Коли вкл - зображення<br>коли викл - колір</div>
+                    <label class="switch" for="backgroundSwitch">
+                    <input type="checkbox" id="backgroundSwitch" checked >
+                    <span class="toggle round"></span>
+                </label>
+            </div>
+                <label for="backgroundSwitch">Вибір фону:</label>
+                <span class="switch-label" id="backgroundSwitchLabel"></span>
+                <label for="UIBackground">Фон зображення або колір:</label>
+                <input type="text" id="UIBackground" name="UIBackground" required>
+                
+                <label for="border-radius">Скруглення карточки:</label>
+                <input type="range" min="1" max="35" value="7" class="slider" name="border-radius" id="border-radius">
+                
+                <label for="imageGap">Відступ між зображеннями:</label>
+                <input type="range" min="0" max="50" value="15" class="slider" name="imageGap" id="imageGap">
+
+                <label for="CardBackground">Колір карточок:</label>
+                <input type="color" id="CardBackground" name="CardBackground" required>
+                
+                
+                <button type="button" onclick="resetBurgerMenuStyles()">Скинути налаштування
+                </button>            
+            </form>
             <form id="form">
                 <label for="title">Назва:</label>
                 <input type="text" id="title" name="title" required>
@@ -40,7 +68,7 @@
         <div id="uiContainer" class="UI">
             <div id="images" class="images">
         </div>
-
+        
     </div>
  
     </div>
@@ -54,9 +82,6 @@
           <div class="infotext">Створив <a href="https://megatrex4.netlify.app/">MEGATREX4</a> з 💜 до вас</div>
         </div>
     </div>
-    <script>
-	    twemoji.parse(document.body)
-    </script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SebastianAigner/twemoji-amazing/twemoji-amazing.css">
+
 </body>
 </html>
