@@ -7,7 +7,7 @@ var burgerMenuState;
 $(document).ready(function () {
     loadSettingsFromLocalStorage();
     applyBurgerMenuStyles();
-
+    
     var isImageBackground = true;
 
     var currentBackgroundColor = '#26292fcc'; // Initialize the variable
@@ -38,8 +38,6 @@ function loadSettingsFromLocalStorage() {
         $('#backgroundSwitch').prop('checked', backgroundSwitchState === 'true');
     }
     
-
-
     var borderRadiusValue = localStorage.getItem('borderRadiusValue') || '0';
     var imageGapValue = localStorage.getItem('imageGapValue') || '0';
 
@@ -51,7 +49,6 @@ function loadSettingsFromLocalStorage() {
     updateBackgroundTypeLabel();
     updateUIBackgroundInput();
     resetBackground();
-    applyBurgerMenuStyles();
 }
 
 
@@ -175,45 +172,48 @@ function hideBurgerMenu() {
     applyBurgerMenuStyles();
 }
 
-// Update the applyBurgerMenuStyles function to include the resetBackground call
 function applyBurgerMenuStyles() {
     // Get the current form values
     var currentBorderRadius = $('#border-radius').val() + 'px';
     var currentCardBackgroundColor = $('#CardBackground').val();
     var currentUiBackground = $('#UIBackground').val();
-
-    // Apply styles only if they have changed
-    if (currentBorderRadius !== $('.itemcontainer').css('border-radius')) {
-        $('.itemcontainer').css('border-radius', currentBorderRadius);
-    }
-
-    // Get the current value of the image gap slider
     var currentImageGap = $('#imageGap').val() + 'px';
 
-    // Apply styles only if they have changed
-    if (currentImageGap !== $('.images').css('gap')) {
-        $('.images').css('gap', currentImageGap);
+    // Check if fields are empty and retrieve values from memory if needed
+    if (currentBorderRadius === 'px') {
+        currentBorderRadius = localStorage.getItem('borderRadiusValue') || '0px';
+        $('#border-radius').val(parseInt(currentBorderRadius)); // Update input field
+    }
+    if (currentCardBackgroundColor === '') {
+        currentCardBackgroundColor = localStorage.getItem('cardBackgroundColor') || '#ffffff';
+        $('#CardBackground').val(currentCardBackgroundColor); // Update input field
+    }
+    if (currentUiBackground === '') {
+        currentUiBackground = localStorage.getItem('uiBackgroundImage') || '';
+        $('#UIBackground').val(currentUiBackground); // Update input field
+    }
+    if (currentImageGap === 'px') {
+        currentImageGap = localStorage.getItem('imageGapValue') || '10px';
+        $('#imageGap').val(parseInt(currentImageGap)); // Update input field
     }
 
-    if (currentCardBackgroundColor !== $('.itemcontainer').css('background-color')) {
-        $('.itemcontainer').css('background-color', currentCardBackgroundColor);
-    }
+    // Apply styles
+    $('.itemcontainer').css('border-radius', currentBorderRadius);
+    $('.images').css('gap', currentImageGap);
+    $('.itemcontainer').css('background-color', currentCardBackgroundColor);
 
     // Check the state of the backgroundSwitch
     if ($('#backgroundSwitch').prop('checked')) {
         // If switch is checked, set background as image
         var currentUiBackgroundImage = 'url(' + currentUiBackground + ')';
-        if (currentUiBackgroundImage !== $('.UI').css('background')) {
-            $('.UI').css('background', currentUiBackgroundImage);
-        }
+        $('.UI').css('background', currentUiBackgroundImage);
     } else {
         // If switch is not checked, set background as color
         var backgroundColorToApply = currentUiBackground ? currentUiBackground : '#26292fcc';
-        if (backgroundColorToApply !== $('.UI').css('background-color')) {
-            $('.UI').css('background-color', backgroundColorToApply);
-        }
+        $('.UI').css('background-color', backgroundColorToApply);
     }
 }
+
 
 // Call resetBackground initially to set the default background
 resetBackground();
