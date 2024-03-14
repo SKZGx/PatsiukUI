@@ -1,6 +1,18 @@
 var idCounter = 1; // Initialize a counter for unique IDs
 var burgerMenuState;
+var invisibleColorFieldValue;
 
+var standardSettings = {
+    isImageBackground: true,
+    currentBackgroundColor: '#1e2126',
+    backgroundSwitchState: true,
+    borderRadiusValue: '17',
+    imageGapValue: '21',
+    UIBackgroundImage: 'https://i.imgur.com/ukZ8NJu.png',
+    UIBackgroundColor: '',
+    CardBackground: '#1e2126', // Add CardBackground property to standardSettings
+    ColorText: '#ffffff' // Add ColorText property to standardSettings
+};
 
 
 // Load items from localStorage on page load
@@ -10,7 +22,7 @@ $(document).ready(function () {
     
     var isImageBackground = true;
 
-    var currentBackgroundColor = '#26292fcc'; // Initialize the variable
+    var currentBackgroundColor = '#1e2126'; // Initialize the variable
 
     
 // Call saveSettingsToLocalStorage() within your existing event listeners
@@ -21,47 +33,79 @@ $('#backgroundSwitch').on('change', function () {
     saveSettingsToLocalStorage(); // Save settings when background switch changes
 });
 
+window.addEventListener('load', function() {
+    applyBurgerMenuStyles();
+});
+
+
+// Event listener for ColorText input change
+$('#ColorText').on('input', function () {
+    standardSettings.ColorText = $(this).val();
+    applyBurgerMenuStyles();
+    saveSettingsToLocalStorage(); // Save settings when ColorText changes
+});
+
 // Event listener for UIBackground input change
 $('#UIBackground').on('input', function () {
-    currentBackgroundColor = $(this).val();
+    standardSettings.currentBackgroundColor = $(this).val();
     applyBurgerMenuStyles();
     saveSettingsToLocalStorage(); // Save settings when UIBackground changes
 });
     
-function loadSettingsFromLocalStorage() {
-    // Load relevant settings from local storage
-    isImageBackground = localStorage.getItem('isImageBackground') === 'true';
-    currentBackgroundColor = localStorage.getItem('currentBackgroundColor') || '#26292fcc';
-    var backgroundSwitchState = localStorage.getItem('backgroundSwitchState');
 
-    if (backgroundSwitchState !== null) {
-        $('#backgroundSwitch').prop('checked', backgroundSwitchState === 'true');
-    }
-    
-    var borderRadiusValue = localStorage.getItem('borderRadiusValue') || '0';
-    var imageGapValue = localStorage.getItem('imageGapValue') || '0';
-
-    // Set the values to the corresponding elements
-    $('#border-radius').val(borderRadiusValue);
-    $('#imageGap').val(imageGapValue);
-
-    // Update UI based on loaded settings
-    updateBackgroundTypeLabel();
-    updateUIBackgroundInput();
-    resetBackground();
-}
-
-
+// Function to save settings to local storage
 function saveSettingsToLocalStorage() {
-    localStorage.setItem('isImageBackground', isImageBackground);
-    localStorage.setItem('currentBackgroundColor', currentBackgroundColor);
-    localStorage.setItem('backgroundSwitchState', $('#backgroundSwitch').prop('checked'));
-    localStorage.setItem('borderRadiusValue', $('#border-radius').val());
-    localStorage.setItem('imageGapValue', $('#imageGap').val());
-    // Add more settings as needed
-    // ...
+    // Initialize an object to store all settings
+    var allSettings = {};
 
+    // Get values from form fields
+    allSettings.settings = {
+        backgroundSwitchState: $('#backgroundSwitch').prop('checked'),
+        borderRadiusValue: $('#border-radius').val(),
+        imageGapValue: $('#imageGap').val(),
+        UIBackground: $('#UIBackground').val(),
+        CardBackground: $('#invisibleColorField').val(), // Store invisible color field value
+        ColorText: $('#ColorText').val() // Store ColorText value
+    };
+
+    // Convert the settings object to JSON and save to local storage
+    localStorage.setItem('allSettings', JSON.stringify(allSettings));
 }
+
+// Function to load settings from local storage
+function loadSettingsFromLocalStorage() {
+    // Load settings from local storage
+    var savedSettings = JSON.parse(localStorage.getItem('allSettings'));
+
+    // If there are saved settings, update the form fields
+    if (savedSettings && savedSettings.settings) {
+        var settings = savedSettings.settings;
+        $('#backgroundSwitch').prop('checked', settings.backgroundSwitchState);
+        $('#border-radius').val(settings.borderRadiusValue);
+        $('#imageGap').val(settings.imageGapValue);
+        $('#UIBackground').val(settings.UIBackground);
+        $('#invisibleColorField').val(settings.CardBackground); // Update CardBackground field as well
+        $('#CardBackground').val(settings.CardBackground); // Update CardBackground input field
+        $('#ColorText').val(settings.ColorText); // Update ColorText input field
+        applyBurgerMenuStyles(); // Apply styles after loading settings
+    } else {
+        // If no settings are found, use standardSettings
+        $('#backgroundSwitch').prop('checked', standardSettings.backgroundSwitchState);
+        $('#border-radius').val(standardSettings.borderRadiusValue);
+        $('#imageGap').val(standardSettings.imageGapValue);
+        $('#UIBackground').val(standardSettings.UIBackground);
+        $('#invisibleColorField').val(standardSettings.CardBackground); // Update CardBackground field as well
+        $('#CardBackground').val(standardSettings.CardBackground); // Update CardBackground input field
+        $('#ColorText').val(standardSettings.ColorText); // Update ColorText input field
+        applyBurgerMenuStyles(); // Apply styles after loading standard settings
+    }
+}
+
+
+
+
+
+
 
 // Call saveSettingsToLocalStorage() within your existing event listeners
 $('#border-radius, #imageGap').on('input', function () {
@@ -70,10 +114,18 @@ $('#border-radius, #imageGap').on('input', function () {
     saveSettingsToLocalStorage(); // Save settings when border-radius or imageGap changes
 });
 
+
+// Call updateUIBackgroundInput initially to set the default input type
+updateUIBackgroundInput();
+// Call resetBackground initially to set the default background
+resetBackground();
+// Apply styles after setting the default input type and background
+applyBurgerMenuStyles();
+
 // Function to reset the background based on the switch state and UIBackground value
 function resetBackground() {
-    var defaultBackgroundColor = '#26292fcc'; // Set your default color here
-    var defaultBackgroundImage = 'https://i.imgur.com/ukZ8NJu.png'; // Set your default image here
+    var defaultBackgroundColor = standardSettings.currentBackgroundColor; // Use standard settings
+    var defaultBackgroundImage = standardSettings.UIBackgroundImage; // Use standard settings
 
     // Check the state of the backgroundSwitch
     if ($('#backgroundSwitch').prop('checked')) {
@@ -85,6 +137,9 @@ function resetBackground() {
         $('.UI').css('background-image', 'none'); // Remove background image
         $('#UIBackground').val(defaultBackgroundColor);
     }
+
+    // Update isImageBackground based on the switch state
+    standardSettings.isImageBackground = $('#backgroundSwitch').prop('checked');
 }
 
     // Call updateUIBackgroundInput initially to set the default input type
@@ -96,7 +151,7 @@ applyBurgerMenuStyles();
 
     // Function to update switch label based on the current state
     function updateBackgroundTypeLabel() {
-        var switchLabel = isImageBackground ? 'Зображення' : 'Колір';
+        var switchLabel = standardSettings.isImageBackground ? 'Зображення' : 'Колір';
         $('#backgroundSwitchLabel').text(switchLabel);
         updateUIBackgroundInput();
     }
@@ -117,10 +172,32 @@ applyBurgerMenuStyles();
 
     loadItemsFromLocalStorage();
 
-    $('#UIBackground').val('#26292fcc');
+    $('#UIBackground').val('#1e2126');
     $('#UIBackground').val('https://i.imgur.com/ukZ8NJu.png');
 
+    updateInvisibleColorField();
+    // Call resetBackground initially to set the default background
+    resetBackground();
+    // Apply styles after setting the initial value and background
+    applyBurgerMenuStyles();
 
+        // Event listener for CardBackground input change
+        $('#CardBackground').on('input', function () {
+            updateInvisibleColorField(); // Call the function to update the invisible color field whenever CardBackground changes
+            saveSettingsToLocalStorage(); // Save settings when CardBackground changes
+        });
+    
+    
+    // Function to update the invisible color field
+    function updateInvisibleColorField() {
+        var cardBackgroundColor = $('#CardBackground').val(); // Get the value of CardBackground input
+        $('#invisibleColorField').val(cardBackgroundColor); // Update the value of the invisible color field
+    }
+
+        // Function to save the value of the invisible color field
+    function saveInvisibleColorFieldValue() {
+        invisibleColorFieldValue = $('#invisibleColorField').val();
+    }
 
     // Initialize state to store latest settings
     burgerMenuState = {
@@ -172,28 +249,30 @@ function hideBurgerMenu() {
     applyBurgerMenuStyles();
 }
 
+// Function to apply burger menu styles
 function applyBurgerMenuStyles() {
     // Get the current form values
     var currentBorderRadius = $('#border-radius').val() + 'px';
     var currentCardBackgroundColor = $('#CardBackground').val();
     var currentUiBackground = $('#UIBackground').val();
     var currentImageGap = $('#imageGap').val() + 'px';
+    var currentColorText = $('#ColorText').val(); // Get the ColorText value
 
-    // Check if fields are empty and retrieve values from memory if needed
+    // Check if fields are empty and retrieve values from standard settings if needed
     if (currentBorderRadius === 'px') {
-        currentBorderRadius = localStorage.getItem('borderRadiusValue') || '0px';
+        currentBorderRadius = standardSettings.borderRadiusValue + 'px';
         $('#border-radius').val(parseInt(currentBorderRadius)); // Update input field
     }
     if (currentCardBackgroundColor === '') {
-        currentCardBackgroundColor = localStorage.getItem('cardBackgroundColor') || '#ffffff';
+        currentCardBackgroundColor = standardSettings.currentBackgroundColor;
         $('#CardBackground').val(currentCardBackgroundColor); // Update input field
     }
     if (currentUiBackground === '') {
-        currentUiBackground = localStorage.getItem('uiBackgroundImage') || '';
+        currentUiBackground = standardSettings.UIBackgroundImage;
         $('#UIBackground').val(currentUiBackground); // Update input field
     }
     if (currentImageGap === 'px') {
-        currentImageGap = localStorage.getItem('imageGapValue') || '10px';
+        currentImageGap = standardSettings.imageGapValue + 'px';
         $('#imageGap').val(parseInt(currentImageGap)); // Update input field
     }
 
@@ -202,6 +281,9 @@ function applyBurgerMenuStyles() {
     $('.images').css('gap', currentImageGap);
     $('.itemcontainer').css('background-color', currentCardBackgroundColor);
 
+    // Apply ColorText to specified elements
+    $('.title, .translated, .approved').css('color', currentColorText);
+
     // Check the state of the backgroundSwitch
     if ($('#backgroundSwitch').prop('checked')) {
         // If switch is checked, set background as image
@@ -209,7 +291,7 @@ function applyBurgerMenuStyles() {
         $('.UI').css('background', currentUiBackgroundImage);
     } else {
         // If switch is not checked, set background as color
-        var backgroundColorToApply = currentUiBackground ? currentUiBackground : '#26292fcc';
+        var backgroundColorToApply = currentUiBackground ? currentUiBackground : standardSettings.currentBackgroundColor;
         $('.UI').css('background-color', backgroundColorToApply);
     }
 }
@@ -222,11 +304,11 @@ applyBurgerMenuStyles();
 
 
 
+// Function to reset only specific styles when resetting burger menu
 function resetBurgerMenuStyles() {
-    // Reset only specific styles when resetting burger menu
-    $('.itemcontainer').css('border-radius', ''); // Reset to default
-    $('#CardBackground').val(''); // Reset input value for card background color
-    $('#UIBackground').val(''); // Reset input value for UI background image
+    // Reset the invisible color field value
+    $('#invisibleColorField').val('');
+
     applyBurgerMenuStyles(); // Apply the reset styles
 }
 
@@ -236,39 +318,44 @@ function resetBurgerMenuStyles() {
         applyBurgerMenuStyles(); // Apply styles immediately on input change
     });
 
-function addItem() {
-    // Get form values
-    var title = $('#title').val();
-    var itemImageLink = $('#itemimage').val();
-    var translated = $('#translated').val();
-    var approved = $('#approved').val();
-
-    // Create unique ID for the new item
-    var newItemId = 'item_' + idCounter;
-
-    // Create an object with item details
-    var newItem = {
-        id: newItemId,
-        title: title,
-        image: itemImageLink,
-        translated: translated,
-        approved: approved
-    };
-
-    // Store the item in local storage
-    storeItemInLocalStorage(newItem);
-
-    // Call the generic add item function
-    addStoredItemToUI(newItem);
-
-    // Increment the counter for the next item
-    idCounter++;
-
-    // Reset form fields
-    $('#form')[0].reset();
-
-   
-}
+    function addItem() {
+        // Get form values
+        var title = $('#title').val();
+        var itemImageLink = $('#itemimage').val();
+        var translated = $('#translated').val();
+        var approved = $('#approved').val();
+    
+        // Retrieve the current ID counter value from local storage or initialize it to 1 if not found
+        var idCounter = parseInt(localStorage.getItem('idCounter')) || 1;
+    
+        // Create unique ID for the new item using the current ID counter value
+        var newItemId = 'item_' + idCounter;
+    
+        // Create an object with item details
+        var newItem = {
+            id: newItemId,
+            title: title,
+            image: itemImageLink,
+            translated: translated,
+            approved: approved
+        };
+    
+        // Store the item in local storage
+        storeItemInLocalStorage(newItem);
+    
+        // Call the generic add item function
+        addStoredItemToUI(newItem);
+        applyBurgerMenuStyles();
+    
+        // Increment the counter for the next item
+        idCounter++;
+    
+        // Store the updated counter value back to local storage
+        localStorage.setItem('idCounter', idCounter);
+    
+        // Reset form fields
+        $('#form')[0].reset();
+    }
 
 $('.removeobj').on('click', '.removebtn', function () {
     var itemId = $(this).data('itemid');
@@ -355,10 +442,10 @@ function addStoredItemToUI(item) {
                 <div class="itemimage" style="background: url('${item.image}');"></div>
             </div>
             <div class="infocont">
-                <div class="title">${item.title}</div>
+                <div id="itemtitle" class="title">${item.title}</div>
                 <div class="statuscont">
-                    <div class="translated" style="width: ${item.translated}%;"></div>
-                    <div class="approved" style="width: ${item.approved}%;"></div>
+                    <div id="itemtranslated" class="translated" style="width: ${item.translated}%;"></div>
+                    <div id="itemapproved" class="approved" style="width: ${item.approved}%;"></div>
                     <div class="percentage">${item.translated}% ✏️ ${item.approved}% ✅</div>
                 </div>
             </div>
@@ -372,13 +459,20 @@ function addStoredItemToUI(item) {
     var removeButtonHTML = `
         <div class="removecont" id="${item.id}">
             <div class=removetextcont>
+            <div class="contcont">
                 <div class="removebtn" data-itemid="${item.id}" title="remove" onclick="removeItem('${item.id}')">
                     <i class="emoji em-delete"></i>
                 </div>
+                <div class="nameUI">
+                <div class="itemimage" style="background: url('${item.image}');"></div>
+                
                 <div>${item.title}</div>
+                </div></div>
             </div>
-            <input type="number" class="approved-input" value="${item.approved}" placeholder="Затверджено" onchange="updateMemoryValues('${item.id}', 'approved', this.value)">
-            <input type="number" class="translated-input" value="${item.translated}" placeholder="Перекладено" onchange="updateMemoryValues('${item.id}', 'translated', this.value)">
+            <label for="translated">✏️ Перекладено:</label >
+            <input type="number" class="translated-input form__label" value="${item.translated}" onchange="updateMemoryValues('${item.id}', 'translated', this.value)">
+            <label for="approved">✅ Затверджено:</label >
+            <input type="number" class="approved-input form__label" value="${item.approved}" onchange="updateMemoryValues('${item.id}', 'approved', this.value)">
         </div>
     `;
 

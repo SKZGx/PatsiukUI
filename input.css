@@ -1,0 +1,58 @@
+
+
+/* Text */
+input[type=text], input[type=number] {
+    appearance: none;
+    border: none;
+    outline: none;
+    border-bottom: .2em solid #7e292a;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: .2em .2em 0 0;
+    padding: .4em;
+    color: #e2cbd3;
+    margin-top: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+
+
+
+
+input[type=checkbox]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em #E91E63;
+    background-color: CanvasText;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transform-origin: left top;
+}
+
+input[type=checkbox]:checked::before {
+    transform: scale(1);
+}
+
+
+/* Color */
+input[type=color] {
+    padding: 0;
+    border: none;
+    width: 10em;
+    height: 2em;
+    border-radius: 2rem;
+}
+
+input[type=color]::-webkit-color-swatch {
+    border: none;
+    border-radius: 2rem;
+
+}
+
+input[type=color]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+
+

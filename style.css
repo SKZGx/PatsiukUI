@@ -1,3 +1,35 @@
+/* Chrome, Edge and Safari */
+*::-webkit-scrollbar {
+    height: 4px;
+    width: 4px;
+  }
+  *::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background-color: #DFE9EB;
+  }
+  
+  *::-webkit-scrollbar-track:hover {
+    background-color: #B8C0C2;
+  }
+  
+  *::-webkit-scrollbar-track:active {
+    background-color: #B8C0C2;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #7E292A;
+  }
+  
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: #9A3233;
+  }
+  
+  *::-webkit-scrollbar-thumb:active {
+    background-color: #B0393B;
+  }
+
+
 html{
     background-color: #16181c;
 }
@@ -15,6 +47,7 @@ html{
     min-width: 650px;
     min-height: 650px;
     margin: 10px;
+    
 }
 
 
@@ -32,10 +65,13 @@ html{
 }
 
 .calc {
+    display: flex;
     position: relative;
-    background-color: #26292f;
     color: #b0bac5;
     font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Roboto, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
 }
 
 .images{
@@ -50,6 +86,7 @@ html{
     gap: 15px;
     align-content: center;
     padding: 10px;
+    margin: 30px 0;
 }
 
 .infocont {
@@ -63,9 +100,25 @@ html{
 .UI {
     position: relative;
     background: url(https://i.imgur.com/ukZ8NJu.png);
-    background-repeat: no-repeat!important;
-    background-position: center center!important;
-    background-size: cover!important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: cover !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 900px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+}
+
+.contcont {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 5px;
 }
 
 .alarm{
@@ -87,6 +140,14 @@ html{
     background-size: cover !important;
     border-radius: 0.5rem;
     
+}
+
+.itemadd{
+    width: 400px;
+    height: 400px;
+    background-color: #26292f;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 form {
@@ -112,6 +173,7 @@ input{
     border: 1px solid rgba(51, 51, 51, 0.125);
     align-items: center;
     align-content: center;
+    border-radius: 9px;
 }
 
 .itemtitlecont{
@@ -178,7 +240,9 @@ input{
 
 
 .removebtn{
-    margin-right: 5px;
+    position: absolute;
+    left: 1px;
+    top: 1px;
     max-width: 30px;
     max-height: 30px;
     min-width: 30px;
@@ -187,13 +251,18 @@ input{
 
 .removeobj {
     display: flex;
-    padding: 10px;
     flex-wrap: wrap;
+    padding: 5px;
     gap: 10px;
     justify-content: center;
-    align-items: center;
-    align-content: center;
+    align-items: stretch;
+    align-content: flex-start;
     color: white;
+    overflow: auto;
+    max-height: 650px;
+    background-color: #26292f;
+    border-radius: 1rem;
+    min-width: 400px;
 }
 
 .removebtn {
@@ -215,12 +284,16 @@ input{
     justify-content: center;
     align-content: center;
     margin-bottom: 10px;
+    gap: 5px;
 }
+
+
 
 
 .removecont {
     display: flex;
     max-width: 210px;
+    min-width: 210px;
     flex-direction: column;
     align-content: center;
     justify-content: center;
@@ -228,6 +301,7 @@ input{
     background-color: #16181c;
     padding: 10px;
     border-radius: 0.5rem;
+    gap: 5px;
 }
 
 .removebtn:hover{
@@ -253,13 +327,24 @@ a:visited{
     background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"%3E%3Cpath fill="white" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z "%3E%3C/path%3E%3C/svg%3E');
 }
 
-button{
-    min-width: 100px;
-    height: 30px;
-    border-radius: 0.2rem;
+.nameUI {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+button {
+    min-width: 200px;
+    height: 60px;
+    border-radius: 0.6rem;
     border: none;
     background-color: #7e292a;
     color: white;
+    font-size: 16px;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Roboto, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    margin-top: 20px;    
 }
 
 button:hover{
@@ -297,10 +382,10 @@ button:hover{
 
 .SiteSettings{
     display: none;
-    background-color: #16181c;
+    background-color: #262b36;
     position: absolute;
-    left: 15px;
-    top: 15px;
+    left: 170px;
+    top: 5px;
     flex-direction: column;
     align-items: center;
     padding: 10px;
