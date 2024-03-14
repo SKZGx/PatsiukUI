@@ -365,7 +365,7 @@ button:hover{
     justify-content: center;
     align-items: center;
     flex-wrap: nowrap;
-    z-index: 50;
+    
 }
 
 .settingsicon{
@@ -391,7 +391,7 @@ button:hover{
     align-items: center;
     padding: 10px;
     border-radius: 0.5rem;
-
+    z-index: 50;
 }
 
 .SiteSettings.burger-menu-visible {
