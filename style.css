@@ -47,7 +47,6 @@ html{
     min-width: 650px;
     min-height: 650px;
     margin: 10px;
-    
 }
 
 
@@ -139,7 +138,7 @@ html{
     height: 100px;
     background-size: cover !important;
     border-radius: 0.5rem;
-    
+    border: 1px solid rgba(255, 255, 255, 0.125);
 }
 
 .itemadd{
@@ -170,10 +169,11 @@ input{
     min-height: 100px;
     padding-bottom: 12px;
     background-color: #26292fcc;
-    border: 1px solid rgba(51, 51, 51, 0.125);
+    border: 1px solid rgba(255, 255, 255, 0.125);
     align-items: center;
     align-content: center;
     border-radius: 9px;
+    box-shadow: 4px 6px 15.5px 3px #00000017;
 }
 
 .iteminfocont {
@@ -401,6 +401,14 @@ button:hover{
     min-width: 1000px;
 }
 
+.infotext{
+    display: flex;
+}
+
+.infotext{
+    gap: 10px;
+}
+
 .SiteSettings{
     display: none;
     background-color: #262b36;
@@ -461,4 +469,8 @@ button:hover{
 
 #backgroundImage{
     height: 23px;
+}
+
+.badges{
+    opacity: 0.5;
 }

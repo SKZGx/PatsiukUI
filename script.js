@@ -21,11 +21,12 @@ function resetBurgerMenuStyles() {
     $('#backgroundImage').val(standardSettings.backgroundImage);
     $('#backgroundColor').val(standardSettings.backgroundColor);
     applyBurgerMenuStyles(); // Apply styles after resetting
-    saveSettingsToLocalStorage(); // Save settings after resetting
+    SettingsavesToLocalStorage(); // Save settings after resetting
     loadSettingsFromLocalStorage();
 
 
 }
+
 
 window.addEventListener('load', function() {
     // Call the applyBurgerMenuStyles function when the page is loaded
@@ -36,6 +37,8 @@ window.addEventListener('load', function() {
 $(document).ready(function () {
     loadSettingsFromLocalStorage();
     applyBurgerMenuStyles();
+
+    
 
         // Listener for changes in the backgroundImage input field
     $('#backgroundImage').on('input', function() {
@@ -70,6 +73,20 @@ $(document).ready(function () {
         saveSettingsToLocalStorage();
     }
     
+    // Event listener for input changes in the translatedchange and approvedchange fields
+    $('#translatedchange, #approvedchange').on('input', function () {
+        var inputValue = parseInt($(this).val()); // Get the input value and parse it as an integer
+        if (isNaN(inputValue)) {
+            // If the input is not a number, set the value to 0
+            $(this).val(0);
+        } else {
+            // If the input is a number, ensure it is within the range 0-100
+            inputValue = Math.min(Math.max(inputValue, 0), 100);
+            $(this).val(inputValue); // Update the input value with the corrected value
+        }
+    });
+
+
     function RemoveBackground() {
         // Clear the value of the backgroundImage input field
         $('#backgroundImage').val('none');
@@ -442,11 +459,14 @@ function addItem() {
 }
 
 function addStoredItemToUI(item) {
+    // Set default image if item image is not provided
+    var itemImage = item.image ? item.image : 'https://i.imgur.com/klcspz6.png';
+
     // Create the HTML content for the new item
     var newItemHTML = `
         <div id="${item.id}" class="itemcontainer">
             <div class="itemtitlecont">
-                <div class="itemimage" style="background: url('${item.image}');"></div>
+                <div class="itemimage" style="background: url('${itemImage}');"></div>
             </div>
             <div class="iteminfocont">
             <div class="infocont">
@@ -472,21 +492,22 @@ function addStoredItemToUI(item) {
                     <i class="emoji em-delete"></i>
                 </div>
                 <div class="nameUI">
-                <div class="itemimage" style="background: url('${item.image}');"></div>
+                <div class="itemimage" style="background: url('${itemImage}');"></div>
                 
                 <div>${item.title}</div>
                 </div></div>
             </div>
             <label for="translated">✏️ Перекладено:</label >
-            <input type="number" class="translated-input form__label" value="${item.translated}" onchange="updateMemoryValues('${item.id}', 'translated', this.value)">
+            <input id="translatedchange" type="number" min="0" max="100" class="translated-input form__label" value="${item.translated}" onchange="updateMemoryValues('${item.id}', 'translated', this.value)">
             <label for="approved">✅ Затверджено:</label >
-            <input type="number" class="approved-input form__label" value="${item.approved}" onchange="updateMemoryValues('${item.id}', 'approved', this.value)">
+            <input id="approvedchange" type="number" min="0" max="100" class="approved-input form__label" value="${item.approved}" onchange="updateMemoryValues('${item.id}', 'approved', this.value)">
         </div>
     `;
 
     // Append the remove button to the "removeobj" div using innerHTML
     document.querySelector('.removeobj').innerHTML += removeButtonHTML;
 }
+
 
 function updateMemoryValues(itemId, field, value) {
     // Update values in the local storage
