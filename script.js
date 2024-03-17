@@ -40,37 +40,6 @@ $(document).ready(function () {
         saveSettingsToLocalStorage(); // Save settings when ColorText changes
     });
 
-    function updateCardSize(scaleValue) {
-        // Calculate the width and height of the card based on the scale value
-        var cardWidth = scaleValue * 270; // Assuming the initial width of the card is 270px
-        var cardHeight = scaleValue * 100; // Assuming the initial height of the card is 100px
-    
-        // Apply dimensions to the card
-        $('.itemcontainer').css({
-            'width': cardWidth + 'px', // Set the width of the card
-            'height': cardHeight + 'px' // Set the height of the card
-        });
-    
-        // Calculate dimensions for elements inside the card
-        var itemImageSize = scaleValue * 100; // Assuming the initial size of the item image is 100px
-        var itemTitleFontSize = scaleValue * 16; // Assuming the initial font size of the item title is 16px
-        var percentageFontSize = scaleValue * 14; // Assuming the initial font size of the percentage text is 14px
-    
-        // Apply dimensions to elements inside the card
-        $('.images .itemimage').css('width', itemImageSize + 'px'); // Set the width of the item image
-        $('.images .itemimage').css('height', itemImageSize + 'px'); // Set the height of the item image
-        $('.images .title').css('font-size', itemTitleFontSize + 'px'); // Set the font size of the item title
-        $('.percentage').css('font-size', percentageFontSize + 'px'); // Set the font size of the percentage text
-    
-        // Update the height of the .statuscont element
-        var statusContHeight = scaleValue * 20; // Adjust as needed
-        $('.statuscont').css('height', statusContHeight + 'px');
-    
-        // Save the scale value to localStorage
-        localStorage.setItem('cardScaleValue', scaleValue);
-    }
-    
-    
     // Load the scale value from localStorage when the page loads
     $(document).ready(function () {
         var savedScaleValue = localStorage.getItem('cardScaleValue');
@@ -150,9 +119,40 @@ function hideBurgerMenu() {
     applyBurgerMenuStyles();
 }
 
-// Function to apply burger menu styles
+function updateCardSize(scaleValue) {
+    // Calculate the width and height of the card based on the scale value
+    var cardWidth = scaleValue * 270; // Assuming the initial width of the card is 270px
+    var cardHeight = scaleValue * 100; // Assuming the initial height of the card is 100px
+
+    // Apply dimensions to the card
+    $('.itemcontainer').css({
+        'width': cardWidth + 'px', // Set the width of the card
+        'height': cardHeight + 'px' // Set the height of the card
+    });
+
+    // Calculate dimensions for elements inside the card
+    var itemImageSize = scaleValue * 100; // Assuming the initial size of the item image is 100px
+    var itemTitleFontSize = scaleValue * 16; // Assuming the initial font size of the item title is 16px
+    var percentageFontSize = scaleValue * 14; // Assuming the initial font size of the percentage text is 14px
+
+    // Apply dimensions to elements inside the card
+    $('.images .itemimage').css('width', itemImageSize + 'px'); // Set the width of the item image
+    $('.images .itemimage').css('height', itemImageSize + 'px'); // Set the height of the item image
+    $('.images .title').css('font-size', itemTitleFontSize + 'px'); // Set the font size of the item title
+    $('.percentage').css('font-size', percentageFontSize + 'px'); // Set the font size of the percentage text
+
+    // Update the height of the .statuscont element
+    var statusContHeight = scaleValue * 20; // Adjust as needed
+    $('.statuscont').css('height', statusContHeight + 'px');
+
+    // Save the scale value to localStorage
+    localStorage.setItem('cardScaleValue', scaleValue);
+}
+
+// Function to apply burger menu styles and update card size
 function applyBurgerMenuStyles() {
     // Get the current form values
+    
     var currentBorderRadius = $('#border-radius').val() + 'px';
     var currentImageGap = $('#imageGap').val() + 'px'; // Get the value of imageGap
     var currentCardBackgroundColor = $('#CardBackground').val();
@@ -179,7 +179,14 @@ function applyBurgerMenuStyles() {
 
     // Apply ColorText to specified elements
     $('.title, .percentagecont').css('color', currentColorText);
+
+    // Trigger updateCardSize
+    var scaleValue = $('#cardSize').val() / 100; // Convert slider value to scale value (0-1)
+    updateCardSize(scaleValue); // Update card size
+    var textPercentage = scaleValue * 100; // Calculate the percentage for the text size
+    $('.percentage').css('font-size', textPercentage + '%'); // Set the font size of the percentage text dynamically
 }
+
 
 
 // Event listener for the input event on the #imageGap slider
@@ -425,9 +432,14 @@ function captureScreenshotWithDomToImage() {
             URL.revokeObjectURL(link.href);
         })
         .catch(function (error) {
+            // Log the error for debugging
             console.error('Error capturing screenshot:', error);
+
+            // Display an alert to the user about the error
+            alert('Error capturing screenshot. Please check the console for more details.');
         });
 }
+
 
 
 $('.color-picker').spectrum({
