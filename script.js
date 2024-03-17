@@ -6,8 +6,11 @@ const standardSettings = {
     borderRadiusValue: '10', // Example default value
     imageGapValue: '20', // Example default value
     CardBackground: '#000000', // Example default value
-    ColorText: '#ffffff' // Example default value
+    ColorText: '#ffffff', // Example default value
+    backgroundImage: 'https://i.imgur.com/ukZ8NJu.png', // Default background image URL
+    backgroundColor: '#26292f' // Default background color
 };
+
 
 function resetBurgerMenuStyles() {
     // Reset burger menu styles using standardSettings
@@ -15,14 +18,66 @@ function resetBurgerMenuStyles() {
     $('#imageGap').val(standardSettings.imageGapValue);
     $('#CardBackground').val(standardSettings.CardBackground);
     $('#ColorText').val(standardSettings.ColorText);
+    $('#backgroundImage').val(standardSettings.backgroundImage);
+    $('#backgroundColor').val(standardSettings.backgroundColor);
     applyBurgerMenuStyles(); // Apply styles after resetting
     saveSettingsToLocalStorage(); // Save settings after resetting
+    loadSettingsFromLocalStorage();
+
+
 }
+
+window.addEventListener('load', function() {
+    // Call the applyBurgerMenuStyles function when the page is loaded
+    applyBurgerMenuStyles();
+});
 
 // Load items from localStorage on page load
 $(document).ready(function () {
     loadSettingsFromLocalStorage();
     applyBurgerMenuStyles();
+
+        // Listener for changes in the backgroundImage input field
+    $('#backgroundImage').on('input', function() {
+        var backgroundImageUrl = $(this).val(); // Get the value of the backgroundImage input field
+        $('#uiContainer').css('background-image', 'url(' + backgroundImageUrl + ')'); // Set the background image of #uiContainer
+        saveSettingsToLocalStorage();
+    });
+
+    $('#backgroundColor').on('input', function () {
+        var backgroundColor = $(this).val(); // Get the value of the backgroundColor input field
+        $('#uiContainer').css('background-color', backgroundColor); // Set the background color of #uiContainer
+        saveSettingsToLocalStorage();
+    })
+    
+    // Event listener for clicking on the RemoveBackground div
+    $('#RemoveBackground').on('click', function () {
+        RemoveBackground();
+        saveSettingsToLocalStorage();
+    });
+
+    $('#RemoveBackgroundColor').on('click', function () {
+        RemoveBackgroundColor();
+        saveSettingsToLocalStorage();
+    });
+
+    function RemoveBackgroundColor() {
+        // Clear the value of the backgroundColor input field
+        $('#backgroundColor').val('none');
+        // Remove the background color from the uiContainer
+        $('#uiContainer').css('background-color', 'none');
+        // Save the updated settings to local storage
+        saveSettingsToLocalStorage();
+    }
+    
+    function RemoveBackground() {
+        // Clear the value of the backgroundImage input field
+        $('#backgroundImage').val('none');
+        // Remove the background image from the uiContainer
+        $('#uiContainer').css('background-image', 'none');
+        // Save the updated settings to local storage
+        saveSettingsToLocalStorage();
+    }
 
     $('#CardBackground').on('input', function () {
         saveSettingsToLocalStorage(); // Save settings when CardBackground color changes
@@ -66,7 +121,8 @@ $(document).ready(function () {
     burgerMenuState = {
         borderRadius: $('#border-radius').val(),
         cardBackgroundColor: $('#CardBackground').val(),
-        uiBackgroundImage: $('#UIBackground').val()
+        uiBackgroundImage: $('#UIBackground').val(),
+        uiBackgroundColor: $('#backgroundColor').val()
     };
 
     // Attach input event listeners to form elements for real-time updates
@@ -103,7 +159,8 @@ function updateBurgerMenuState() {
     burgerMenuState = {
         borderRadius: $('#border-radius').val(),
         cardBackgroundColor: $('#CardBackground').val(),
-        uiBackgroundImage: $('#UIBackground').val()
+        uiBackgroundImage: $('#UIBackground').val(),
+        uiBackgroundColor: $('#backgroundColor').val()
     };
 }
 
@@ -157,10 +214,13 @@ function applyBurgerMenuStyles() {
     var currentImageGap = $('#imageGap').val() + 'px'; // Get the value of imageGap
     var currentCardBackgroundColor = $('#CardBackground').val();
     var currentColorText = $('#ColorText').val(); // Get the ColorText value
+    var currentBackgroundImage = $('#backgroundImage').val(); // Get the background image URL
+    var currentBackgroundColor = $('#backgroundColor').val(); // Get the background color value
 
     // Update the span elements with the current values
     $('.settingsradius').text($('#border-radius').val()); // Update span with border-radius value
     $('.settingsimageGap').text($('#imageGap').val()); // Update span with imageGap value
+    $('.settingssize').text($('#cardSize').val()); // Update span with imageGap value
 
     // Check if fields are empty and retrieve values from standard settings if needed
     if (currentBorderRadius === 'px') {
@@ -180,12 +240,23 @@ function applyBurgerMenuStyles() {
     // Apply ColorText to specified elements
     $('.title, .percentagecont').css('color', currentColorText);
 
+    // Check if backgroundImage is set to "none"
+    if (currentBackgroundImage === 'none') {
+        $('#uiContainer').css('background-image', 'none');
+        $('#uiContainer').css('background-color', currentBackgroundColor);
+    } else {
+        $('#uiContainer').css('background-image', 'url(' + currentBackgroundImage + ')');
+    }
+
     // Trigger updateCardSize
     var scaleValue = $('#cardSize').val() / 100; // Convert slider value to scale value (0-1)
     updateCardSize(scaleValue); // Update card size
     var textPercentage = scaleValue * 100; // Calculate the percentage for the text size
     $('.percentage').css('font-size', textPercentage + '%'); // Set the font size of the percentage text dynamically
 }
+
+
+
 
 
 
@@ -196,7 +267,6 @@ $('#imageGap').on('input', function () {
 });
 
 
-// Function to save settings to local storage
 function saveSettingsToLocalStorage() {
     // Initialize an object to store all settings
     var allSettings = {};
@@ -206,13 +276,16 @@ function saveSettingsToLocalStorage() {
         borderRadiusValue: $('#border-radius').val(),
         imageGapValue: $('#imageGap').val(),
         CardBackground: $('#CardBackground').val(), // Store CardBackground value
-        ColorText: $('#ColorText').val() // Store ColorText value
+        ColorText: $('#ColorText').val(), // Store ColorText value
+        backgroundImage: $('#backgroundImage').val(), // Store backgroundImage URL
+        backgroundColor: $('#backgroundColor').val() // Store backgroundColor
     };
-    
 
     // Convert the settings object to JSON and save to local storage
     localStorage.setItem('allSettings', JSON.stringify(allSettings));
 }
+
+
 
 // Function to load settings from local storage
 function loadSettingsFromLocalStorage() {
@@ -226,6 +299,17 @@ function loadSettingsFromLocalStorage() {
         $('#imageGap').val(settings.imageGapValue);
         $('#CardBackground').val(settings.CardBackground); // Update CardBackground input field
         $('#ColorText').val(settings.ColorText); // Update ColorText input field
+        $('#backgroundImage').val(settings.backgroundImage); // Update backgroundImage input field
+        $('#backgroundColor').val(settings.backgroundColor); // Update backgroundColor input field
+
+        // Apply the background image to the uiContainer
+        if (settings.backgroundImage) {
+            $('#uiContainer').css('background-image', 'url(' + settings.backgroundImage + ')');
+        } else {
+            // If no custom background image is found, use the default background image URL
+            $('#uiContainer').css('background-image', 'url(' + standardSettings.backgroundImage + ')');
+        }
+
         applyBurgerMenuStyles(); // Apply styles after loading settings
     } else {
         // If no settings are found, use standardSettings
@@ -233,9 +317,19 @@ function loadSettingsFromLocalStorage() {
         $('#imageGap').val(standardSettings.imageGapValue);
         $('#CardBackground').val(standardSettings.CardBackground); // Update CardBackground input field
         $('#ColorText').val(standardSettings.ColorText); // Update ColorText input field
+        $('#backgroundImage').val(standardSettings.backgroundImage); // Set backgroundImage input field to default value
+        $('#backgroundColor').val(standardSettings.backgroundColor); // Set backgroundColor input field to default value
+
+        // Apply the default background image to the uiContainer
+        $('#uiContainer').css('background-image', 'url(' + standardSettings.backgroundImage + ')');
+
         applyBurgerMenuStyles(); // Apply styles after loading standard settings
     }
 }
+
+
+
+
 
 $('.removeobj').on('click', '.removebtn', function () {
     var itemId = $(this).data('itemid');

@@ -59,13 +59,25 @@
                 </div>
 
                 <!-- HTML -->
-                <label for="backgroundImage">Background Image:</label>
-                <input type="text" id="backgroundImage" name="backgroundImage">
+                <label for="backgroundImage">Фон:</label>
+                <div class="RemoveBackgroundcont"> 
+                    <input type="text" id="backgroundImage" name="backgroundImage">
+                    <div id="RemoveBackground" class="removebtn removebtnintext" title="remove">
+                        <i class="emoji em-delete"></i>
+                    </div>
+                </div>
+
+                <div class="backgroundColorContainer"><label for="backgroundColor">Колір фону:</label>
+                <div class="RemoveBackgroundcont"> 
+                    <input type="color" id="backgroundColor" name="backgroundColor">
+                    <div id="RemoveBackgroundColor" class="removebtn removebtnintext" title="remove">
+                        <i class="emoji em-delete"></i>
+                    </div>
+                </div></div>
 
 
 
-
-                <label for="cardSize">Розмір карточок:</label>
+                <label for="cardSize">Розмір карточок: <span class="settingssize"></span></label>
                 <input type="range" min="100" max="300" value="200" class="slider" name="cardSize" id="cardSize">
 
 
