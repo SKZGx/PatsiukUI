@@ -56,33 +56,25 @@
             <form id="SiteSettingsForm" class="SiteSettings">
                 <div class="slidercont">
                     <div class="alarm"><b>ЦЕ МЕНЮ ПРАЦЮЄ В БЕТА РЕЖИМІ</b><br></div>
-                    <div class="togglecontainertext"><br>Коли викл - зображення<br>коли вкл - колір</div>
-                    <label class="switch" for="backgroundSwitch">
-                    <input type="checkbox" id="backgroundSwitch" checked >
-                    <span class="toggle round"></span>
-                </label>
-            </div>
-                <label for="backgroundSwitch">Вибір фону:</label>
-                <span class="switch-label" id="backgroundSwitchLabel"></span>
-                <label for="UIBackground">Фон зображення або колір:</label>
-                <input type="text" id="UIBackground" name="UIBackground" required>
-                
-                
-                <label for="border-radius">Скруглення карточки:</label>
-                <input type="range" min="1" max="35" value="7" class="slider" name="border-radius" id="border-radius">
-                
-                <label for="imageGap">Відступ між зображеннями:</label>
-                <input type="range" min="0" max="50" value="15" class="slider" name="imageGap" id="imageGap">
+                </div>
+                <label for="cardSize">Розмір карточок:</label>
+                <input type="range" min="100" max="300" value="200" class="slider" name="cardSize" id="cardSize">
+
+
+                <label for="border-radius">Скруглення карточки: <span class="settingsradius"></span></label>
+                <input type="range" min="3" max="35" value="7" class="slider" name="border-radius" id="border-radius">
+
+                <label for="imageGap">Відступ між предметами: <span class="settingsimageGap"></span></label>
+                <input type="range" min="5" max="50" value="15" class="slider" name="imageGap" id="imageGap">
 
                 <label for="CardBackground">Колір карточок:</label>
-                <input type="text" id="invisibleColorField" style="display: none;">
                 <input type="color" id="CardBackground" name="CardBackground" required>
-                
-                <label for="ColorText">Text Color:</label>
+
+                <label for="ColorText">Колір тексту:</label>
                 <input type="color" id="ColorText" name="ColorText">
-                
+
                 <button type="button" onclick="resetBurgerMenuStyles()">Скинути налаштування
-                </button>            
+                </button>
             </form>
             <form class="itemadd" id="form">
                 <label for="title">Назва:</label>
