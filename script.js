@@ -221,6 +221,7 @@ function updateCardSize(scaleValue) {
 
     // Save the scale value to localStorage
     localStorage.setItem('cardScaleValue', scaleValue);
+    saveSettingsToLocalStorage();
 }
 
 // Function to apply burger menu styles and update card size
@@ -292,6 +293,7 @@ function saveSettingsToLocalStorage() {
     allSettings.settings = {
         borderRadiusValue: $('#border-radius').val(),
         imageGapValue: $('#imageGap').val(),
+        cardSizeValue: $('#cardSize').val(),
         CardBackground: $('#CardBackground').val(), // Store CardBackground value
         ColorText: $('#ColorText').val(), // Store ColorText value
         backgroundImage: $('#backgroundImage').val(), // Store backgroundImage URL
@@ -319,6 +321,14 @@ function loadSettingsFromLocalStorage() {
         $('#backgroundImage').val(settings.backgroundImage); // Update backgroundImage input field
         $('#backgroundColor').val(settings.backgroundColor); // Update backgroundColor input field
 
+        // Set the cardSize slider position
+        if (settings.cardSizeValue) {
+            $('#cardSize').val(settings.cardSizeValue).trigger('input');
+        } else {
+            // Set a default value if cardSizeValue is not present
+            $('#cardSize').val(50).trigger('input');
+        }
+
         // Apply the background image to the uiContainer
         if (settings.backgroundImage) {
             $('#uiContainer').css('background-image', 'url(' + settings.backgroundImage + ')');
@@ -336,6 +346,8 @@ function loadSettingsFromLocalStorage() {
         $('#ColorText').val(standardSettings.ColorText); // Update ColorText input field
         $('#backgroundImage').val(standardSettings.backgroundImage); // Set backgroundImage input field to default value
         $('#backgroundColor').val(standardSettings.backgroundColor); // Set backgroundColor input field to default value
+
+        $('#cardSize').val(50).trigger('input');
 
         // Apply the default background image to the uiContainer
         $('#uiContainer').css('background-image', 'url(' + standardSettings.backgroundImage + ')');
