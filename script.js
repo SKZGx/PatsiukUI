@@ -555,6 +555,48 @@ function captureScreenshotWithDomToImage() {
         });
 }
 
+function makeImage(uri) {
+    // Add crossorigin.me proxy to the image URL
+    const proxiedUrl = 'https://crossorigin.me/' + uri;
+
+    return new Promise(function (resolve, reject) {
+        // Create a new image element
+        var image = new Image();
+
+        // When the image loads successfully
+        image.onload = function () {
+            // Create a canvas element
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+
+            // Set the canvas dimensions to match the image dimensions
+            canvas.width = image.width;
+            canvas.height = image.height;
+
+            // Draw the image onto the canvas
+            context.drawImage(image, 0, 0);
+
+            // Manipulate the image (e.g., add something to it)
+            context.fillStyle = 'rgba(255, 0, 0, 0.5)'; // Red semi-transparent rectangle
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Resolve the promise with the modified image
+            resolve(canvas.toDataURL()); // Convert canvas to data URL and resolve the promise
+        };
+
+        // Handle errors when loading the image
+        image.onerror = reject;
+
+        // Set cross-origin attribute and load the image
+        image.crossOrigin = 'Anonymous';
+        image.src = proxiedUrl; // Use the proxied URL to fetch the image
+    });
+}
+
+
+
+
+
 
 
 $('.color-picker').spectrum({

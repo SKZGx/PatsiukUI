@@ -39,6 +39,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
     <script src="script.js"></script>
     <link rel="icon" type=" image/x-icon" href="https://i.imgur.com/ITiGyrw.png">
 </head>
@@ -125,7 +126,10 @@
     <div class="capture">
         <button onclick="captureScreenshotWithDomToImage()">Зробити знімок</button>
     </div>
-    <canvas id="filterCanvas"></canvas>
+
+    <canvas id="output">
+
+    </canvas>
     <div class="footer">
         <div class="footertext"> 
             <div class="infotext">
