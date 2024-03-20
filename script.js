@@ -215,9 +215,13 @@ function updateCardSize(scaleValue) {
     $('.images .title').css('font-size', itemTitleFontSize + 'px'); // Set the font size of the item title
     $('.percentage').css('font-size', percentageFontSize + 'px'); // Set the font size of the percentage text
 
-    // Calculate border-radius for the .statuscont element
+    // Calculate border-radius for the .statuscont, .approved, and .translated elements
     var statusContBorderRadius = scaleValue * 5; // Adjust as needed
     $('.statuscont, .approved, .translated').css('border-radius', statusContBorderRadius + 'px');
+
+    // Calculate margin for the .statuscont, .approved, and .translated elements
+    var statusContMargin = scaleValue * 5; // Adjust as needed
+    $('.statuscont, .approved, .translated').css('margin', statusContMargin + 'px ' + statusContMargin + 'px');
 
     // Update the height of the .statuscont element
     var statusContHeight = scaleValue * 20; // Adjust as needed
@@ -227,6 +231,7 @@ function updateCardSize(scaleValue) {
     localStorage.setItem('cardScaleValue', scaleValue);
     saveSettingsToLocalStorage();
 }
+
 
 // Function to apply burger menu styles and update card size
 function applyBurgerMenuStyles() {
