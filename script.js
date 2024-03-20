@@ -195,8 +195,8 @@ function hideBurgerMenu() {
 
 function updateCardSize(scaleValue) {
     // Calculate the width and height of the card based on the scale value
-    var cardWidth = scaleValue * 270; // Assuming the initial width of the card is 270px
-    var cardHeight = scaleValue * 100; // Assuming the initial height of the card is 100px
+    var cardWidth = scaleValue * 290; // Assuming the initial width of the card is 270px
+    var cardHeight = scaleValue * 105; // Assuming the initial height of the card is 100px
 
     // Apply dimensions to the card
     $('.itemcontainer').css({
@@ -214,6 +214,10 @@ function updateCardSize(scaleValue) {
     $('.images .itemimage').css('height', itemImageSize + 'px'); // Set the height of the item image
     $('.images .title').css('font-size', itemTitleFontSize + 'px'); // Set the font size of the item title
     $('.percentage').css('font-size', percentageFontSize + 'px'); // Set the font size of the percentage text
+
+    // Calculate border-radius for the .statuscont element
+    var statusContBorderRadius = scaleValue * 5; // Adjust as needed
+    $('.statuscont, .approved, .translated').css('border-radius', statusContBorderRadius + 'px');
 
     // Update the height of the .statuscont element
     var statusContHeight = scaleValue * 20; // Adjust as needed
