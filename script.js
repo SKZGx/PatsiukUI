@@ -221,7 +221,7 @@ function updateCardSize(scaleValue) {
 
     // Calculate margin for the .statuscont, .approved, and .translated elements
     var statusContMargin = scaleValue * 5; // Adjust as needed
-    $('.statuscont, .approved, .translated').css('margin', statusContMargin + 'px ' + statusContMargin + 'px');
+    $('.statuscont').css('margin', statusContMargin + 'px ' + statusContMargin + 'px');
 
     // Update the height of the .statuscont element
     var statusContHeight = scaleValue * 20; // Adjust as needed
