@@ -11,6 +11,23 @@ const standardSettings = {
     backgroundColor: '#26292f' // Default background color
 };
 
+function updateUIContainerSize(scaleValue) {
+    // Calculate the desired width and height of the UI container based on the scale value
+    var containerWidth = scaleValue * 100; // Adjust the multiplier as needed
+    var containerHeight = scaleValue * 100; // Adjust the multiplier as needed
+
+    // Calculate the margin to maintain the spacing with other elements
+
+    // Apply the new width, height, and margin to the UI container
+    $('#uiContainer').css({
+        'width': containerWidth + '%',
+        'height': containerHeight + '%',
+    });
+
+    // Optionally, adjust other styles or properties of child elements if necessary
+}
+
+// Call the function with the desired scale value
 
 function resetBurgerMenuStyles() {
     // Reset burger menu styles using standardSettings
@@ -31,6 +48,8 @@ function resetBurgerMenuStyles() {
 window.addEventListener('load', function() {
     // Call the applyBurgerMenuStyles function when the page is loaded
     applyBurgerMenuStyles();
+    updateUIContainerSize(0.43);
+
 });
 
 // Load items from localStorage on page load
@@ -74,17 +93,26 @@ $(document).ready(function () {
     }
     
     // Event listener for input changes in the translatedchange and approvedchange fields
-    $('#translatedchange, #approvedchange').on('input', function () {
-        var inputValue = parseInt($(this).val()); // Get the input value and parse it as an integer
-        if (isNaN(inputValue)) {
-            // If the input is not a number, set the value to 0
-            $(this).val(0);
-        } else {
-            // If the input is a number, ensure it is within the range 0-100
-            inputValue = Math.min(Math.max(inputValue, 0), 100);
-            $(this).val(inputValue); // Update the input value with the corrected value
-        }
-    });
+$('#translatedchange, #approvedchange', '#translatedchange', '#approvedchange').on('input', function () {
+    var inputValue = parseInt($(this).val()); // Get the input value and parse it as an integer
+    if (isNaN(inputValue)) {
+        // If the input is not a number, set the value to 0
+        $(this).val(0);
+    } else {
+        // If the input is a number, ensure it is within the range 0-100
+        inputValue = Math.min(Math.max(inputValue, 0), 100);
+        $(this).val(inputValue); // Update the input value with the corrected value
+
+        // Update the value in memory
+        var itemId = $(this).closest('.removecont').attr('id');
+        var field = $(this).attr('id').replace('change', ''); // Get the field name (translated or approved)
+        updateMemoryValues(itemId, field, inputValue);
+
+        // Update the values in the #perctext field
+        updatePerctext();
+    }
+});
+
 
 
     function RemoveBackground() {
@@ -268,7 +296,7 @@ function applyBurgerMenuStyles() {
     $('.title, .percentagecont').css('color', currentColorText);
 
     // Check if backgroundImage is set to "none"
-    if (currentBackgroundImage === 'none') {
+    if (currentBackgroundImage === 'none' || '') {
         $('#uiContainer').css('background-image', 'none');
         $('#uiContainer').css('background-color', currentBackgroundColor);
     } else {
@@ -280,6 +308,7 @@ function applyBurgerMenuStyles() {
     updateCardSize(scaleValue); // Update card size
     var textPercentage = scaleValue * 100; // Calculate the percentage for the text size
     $('.percentage').css('font-size', textPercentage + '%'); // Set the font size of the percentage text dynamically
+    updatePerctext();
 }
 
 
@@ -365,6 +394,54 @@ function loadSettingsFromLocalStorage() {
     }
 }
 
+$('.removeobj').on('input', '.title-edit-input', function () {
+    var itemId = $(this).closest('.removecont').attr('id');
+    var newTitle = $(this).val(); // Get the new title from the input field
+
+    // Update the title in the UI
+    $('#' + itemId + ' .itemtitlecont .title').text(newTitle);
+
+    // Update the title in local storage
+    updateItemTitleInLocalStorage(itemId, newTitle);
+
+    // Update the values in the #perctext field
+    updatePerctext();
+});
+
+
+// Event listener for input changes in the #titlechange field
+$('#titlechange').on('input', function () {
+    var itemId = $(this).closest('.removecont').attr('id');
+    var newTitle = $(this).val(); // Get the new title from the input field
+
+    // Update the title in the UI
+    $('#' + itemId + ' .itemtitlecont .title').text(newTitle);
+
+    // Update the title in local storage
+    updateItemTitleInLocalStorage(itemId, newTitle);
+});
+
+
+function updateItemTitleInLocalStorage(itemId, newTitle) {
+    // Retrieve items from local storage
+    var storedItems = JSON.parse(localStorage.getItem('storedItems')) || [];
+
+    // Update the title of the corresponding item in local storage
+    storedItems.forEach(function (item) {
+        if (item.id === itemId) {
+            item.title = newTitle; // Update the title
+        }
+    });
+
+    // Save the updated items back to local storage
+    localStorage.setItem('storedItems', JSON.stringify(storedItems));
+    updatePerctext();
+    updateItems();
+    applyBurgerMenuStyles(); // Apply styles after loading standard settings
+
+}
+
+
 
 
 
@@ -390,9 +467,24 @@ function removeItem(itemId) {
 
     // Update the loaded items immediately
     updateItems();
+
+    // Update the perctext block
+    updatePerctext();
     applyBurgerMenuStyles();
 }
 
+function updatePerctext() {
+    // Clear the contents of the #perctext block
+    var perctext = document.getElementById('perctext');
+    perctext.innerHTML = '';
+
+    // Load items from local storage and update the #perctext block
+    var storedItems = JSON.parse(localStorage.getItem('storedItems')) || [];
+    storedItems.forEach(function (item) {
+        var duplicatePercentages = `${item.translated}%✏️ ${item.approved}%✅`;
+        perctext.innerHTML += `<div>${item.title}: ${duplicatePercentages}</div>`;
+    });
+}
 
 function updateItems() {
     // Clear the contents of the #images div
@@ -401,6 +493,7 @@ function updateItems() {
 
     // Load items from local storage and display them
     loadItemsFromLocalStorage();
+    updatePerctext();
 }
 
 
@@ -451,7 +544,7 @@ function addItem() {
     var idCounter = parseInt(localStorage.getItem('idCounter')) || 1;
 
     // Create unique ID for the new item using the current ID counter value
-    var newItemId = 'item_' + idCounter;
+    var newItemId = 'id_' + idCounter;
 
     // Create an object with item details
     var newItem = {
@@ -493,9 +586,14 @@ function addStoredItemToUI(item) {
             <div class="infocont">
                 <div id="itemtitle" class="title">${item.title}</div>
                 <div class="statuscont">
-                    <div class="statused"> <div id="itemtranslated" class="translated" style="width: ${item.translated}%;"></div>
-                    <div id="itemapproved" class="approved" style="width: ${item.approved}%;"></div></div></div>
-                    <div class="percentagecont"><div class="percentage">${item.translated}% ✏️ ${item.approved}% ✅</div></div>
+                    <div class="statused">
+                        <div id="itemtranslated" class="translated" style="width: ${item.translated}%;"></div>
+                        <div id="itemapproved" class="approved" style="width: ${item.approved}%;"></div>
+                    </div>
+                </div>
+                <div class="percentagecont">
+                    <div class="percentage">${item.translated}% ✏️ ${item.approved}% ✅</div>
+                </div>
             </div>
             </div>
         </div>
@@ -513,32 +611,80 @@ function addStoredItemToUI(item) {
                     <i class="emoji em-delete"></i>
                 </div>
                 <div class="nameUI">
-                <div class="itemimage" style="background: url('${itemImage}');"></div>
-                
-                <div>${item.title}</div>
-                </div></div>
+                    <div class="itemimage" style="background: url('${itemImage}');"></div>
+                    <div>${item.id}</div>
+                </div>
             </div>
-            <label for="translated">✏️ Перекладено:</label >
+            </div>
+            <label for="titlechange">Назва:</label>
+            <input type="text" id="titlechange" class="title-edit-input" onchange="updateItemTitleInLocalStorage('${item.id}', this.value)" value="${item.title}">        
+            <label for="translated">✏️ Перекладено:</label>
             <input id="translatedchange" type="number" min="0" max="100" class="translated-input form__label" value="${item.translated}" onchange="updateMemoryValues('${item.id}', 'translated', this.value)">
-            <label for="approved">✅ Затверджено:</label >
+            <label for="approved">✅ Затверджено:</label>
             <input id="approvedchange" type="number" min="0" max="100" class="approved-input form__label" value="${item.approved}" onchange="updateMemoryValues('${item.id}', 'approved', this.value)">
         </div>
     `;
 
     // Append the remove button to the "removeobj" div using innerHTML
     document.querySelector('.removeobj').innerHTML += removeButtonHTML;
+
+    // Update the duplicated percentages
+    var perctext = document.getElementById('perctext');
+    var duplicatePercentages = `${item.translated}%✏️ ${item.approved}%✅`;
+    perctext.innerHTML += `<div>${item.title}: ${duplicatePercentages}</div>`;
+}
+
+function copyTextToClipboard() {
+    // Get the text content of the perctext block
+    var perctext = document.getElementById('perctext');
+    var textToCopy = perctext.innerText;
+
+    // Create a temporary textarea element to hold the text to copy
+    var textarea = document.createElement('textarea');
+    textarea.value = textToCopy;
+    textarea.setAttribute('readonly', ''); // Ensure it's readonly to prevent modification
+
+    // Set the position off-screen
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px';
+
+    // Append the textarea to the document body
+    document.body.appendChild(textarea);
+
+    // Select the text within the textarea
+    textarea.select();
+
+    // Execute the copy command
+    document.execCommand('copy');
+
+    // Remove the textarea from the document body
+    document.body.removeChild(textarea);
+
+    // Display the copied text temporarily
+    var copiedTextDisplay = document.getElementById('copiedTextDisplay');
+    copiedTextDisplay.classList.add('copied-text-display-visible');
+
+    // After 2 seconds, hide the temporary display
+    setTimeout(function() {
+        copiedTextDisplay.classList.remove('copied-text-display-visible');
+    }, 2000);
 }
 
 
+
+
+
 function updateMemoryValues(itemId, field, value) {
+    // Ensure the value is not greater than 100
+    value = Math.min(value, 100);
+    
     // Update values in the local storage
     var storedItems = JSON.parse(localStorage.getItem('storedItems')) || [];
     var updatedItems = storedItems.map(function (item) {
         if (item.id === itemId) {
-            return { ...item, [field]: value };
+            item[field] = value; // Update the field value
         }
         return item;
-        updateMemoryValues();
     });
 
     // Save the updated array back to local storage
@@ -547,7 +693,10 @@ function updateMemoryValues(itemId, field, value) {
     // Update values in the UI
     $(`#${itemId} .${field}`).css('width', `${value}%`);
     $(`#${itemId} .percentage`).html(`${updatedItems.find(item => item.id === itemId).translated}% ✏️ ${updatedItems.find(item => item.id === itemId).approved}% ✅`);
+    updatePerctext();
 }
+
+
 
 function captureScreenshotWithDomToImage() {
     // Get the UI node

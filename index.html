@@ -79,7 +79,7 @@
 
 
                 <label for="cardSize">Розмір карточок: <span class="settingssize"></span></label>
-                <input type="range" min="100" max="300" value="200" class="slider" name="cardSize" id="cardSize">
+                <input type="range" min="100" max="246" value="150" class="slider" name="cardSize" id="cardSize">
 
 
                 <label for="border-radius">Скруглення карточки: <span class="settingsradius"></span></label>
@@ -99,16 +99,16 @@
             </form>
             <form class="itemadd" id="form">
                 <label for="title">Назва:</label>
-                <input type="text" id="title" name="title" required>
+                <input type="text" placeholder="Назви немає" id="title" name="title" required>
 
                 <label for="itemimage">Посилання на зображення:</label>
                 <input type="text" id="itemimage" name="itemimage" required>
 
                 <label for="translated">✏️ Перекладено:</label>
-                <input type="number" min="0" max="100" id="translated" name="translated" required>
+                <input type="number" value="0" min="0" max="100" id="translated" name="translated" required>
 
                 <label for="approved">✅ Затверджено:</label>
-                <input type="number" min="0" max="100" id="approved" name="approved" required>
+                <input type="number" value="0" min="0" max="100" id="approved" name="approved" required>
 
                 <button type="button" onclick="addItem()">Додати новий елемент</button>
             </form>
@@ -125,8 +125,13 @@
     </div>
     <div class="capture">
         <button onclick="captureScreenshotWithDomToImage()">Зробити знімок</button>
+        <button onclick="copyTextToClipboard()">Скопіювати текст</button>
+        <div class="capturecont"><div id="copiedTextDisplay" class="copied-text-display">Текст скопійовано</div></div>
     </div>
 
+    <div id="perctext">
+
+    </div>
     <canvas id="output">
 
     </canvas>
