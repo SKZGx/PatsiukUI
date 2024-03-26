@@ -197,7 +197,7 @@ input{
 }
 
 input[type="range"] {
-    -webkit-appearance: none;
+    appearance: none;
     width: 100%;
     background: #ffffff;
 }
@@ -216,7 +216,7 @@ input{
     outline: 2px solid #525252;
     border-radius: 5px;
     border: none;
-    -webkit-appearance: none;
+    appearance: none;
 }
 
 input[type=color]{
