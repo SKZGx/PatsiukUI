@@ -602,7 +602,7 @@ button:hover{
     margin-top: 10px;
     background-color: #26292f;
     width: 400px;
-    min-height: 400px;
+    min-height: 50px;
     border-radius: 15px;
     color: #b0bac5;
     font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Roboto, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
@@ -611,5 +611,6 @@ button:hover{
     align-items: center;
     padding: 10px;
     padding-top: 30px;
+    padding-bottom: 30px;
     font-size: 17px;
 }
