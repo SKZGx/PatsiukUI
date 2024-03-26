@@ -55,6 +55,15 @@ html{
     position: relative;
 }
 
+.UI, #uiContainer{
+    max-width: 792px;
+    max-height: 792px;
+    width: 792px;
+    height: 792px;
+    max-width: 792px;
+    max-height: 792px;
+}
+
 .background{
     width: 512px;
     min-width: 512px;
@@ -226,6 +235,8 @@ input[type=color]{
     outline: none;
     appearance: none;
 }
+
+
 
 input[type=color]::-webkit-color-swatch-wrapper {
     padding: 0; 

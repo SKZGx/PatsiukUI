@@ -11,21 +11,7 @@ const standardSettings = {
     backgroundColor: '#26292f' // Default background color
 };
 
-function updateUIContainerSize(scaleValue) {
-    // Calculate the desired width and height of the UI container based on the scale value
-    var containerWidth = scaleValue * 100; // Adjust the multiplier as needed
-    var containerHeight = scaleValue * 100; // Adjust the multiplier as needed
 
-    // Calculate the margin to maintain the spacing with other elements
-
-    // Apply the new width, height, and margin to the UI container
-    $('#uiContainer').css({
-        'width': containerWidth + '%',
-        'height': containerHeight + '%',
-    });
-
-    // Optionally, adjust other styles or properties of child elements if necessary
-}
 
 // Call the function with the desired scale value
 
