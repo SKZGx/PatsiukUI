@@ -467,10 +467,14 @@ function updatePerctext() {
     // Load items from local storage and update the #perctext block
     var storedItems = JSON.parse(localStorage.getItem('storedItems')) || [];
     storedItems.forEach(function (item) {
+        // Set default title if item title is not provided
+        var title = item.title ? item.title : 'Невідомо';
+
         var duplicatePercentages = `${item.translated}%✏️ ${item.approved}%✅`;
-        perctext.innerHTML += `<div>${item.title}: ${duplicatePercentages}</div>`;
+        perctext.innerHTML += `<div>${title}: ${duplicatePercentages}</div>`;
     });
 }
+
 
 function updateItems() {
     // Clear the contents of the #images div
@@ -562,6 +566,9 @@ function addStoredItemToUI(item) {
     // Set default image if item image is not provided
     var itemImage = item.image ? item.image : 'https://i.imgur.com/klcspz6.png';
 
+    // Set default title if item title is not provided
+    var title = item.title ? item.title : 'Невідомо';
+
     // Create the HTML content for the new item
     var newItemHTML = `
         <div id="${item.id}" class="itemcontainer">
@@ -570,7 +577,7 @@ function addStoredItemToUI(item) {
             </div>
             <div class="iteminfocont">
             <div class="infocont">
-                <div id="itemtitle" class="title">${item.title}</div>
+                <div id="itemtitle" class="title">${title}</div>
                 <div class="statuscont">
                     <div class="statused">
                         <div id="itemtranslated" class="translated" style="width: ${item.translated}%;"></div>
@@ -603,7 +610,7 @@ function addStoredItemToUI(item) {
             </div>
             </div>
             <label for="titlechange">Назва:</label>
-            <input type="text" id="titlechange" class="title-edit-input" onchange="updateItemTitleInLocalStorage('${item.id}', this.value)" value="${item.title}">        
+            <input type="text" id="titlechange" class="title-edit-input" onchange="updateItemTitleInLocalStorage('${item.id}', this.value)" value="${title}">        
             <label for="translated">✏️ Перекладено:</label>
             <input id="translatedchange" type="number" min="0" max="100" class="translated-input form__label" value="${item.translated}" onchange="updateMemoryValues('${item.id}', 'translated', this.value)">
             <label for="approved">✅ Затверджено:</label>
@@ -617,8 +624,10 @@ function addStoredItemToUI(item) {
     // Update the duplicated percentages
     var perctext = document.getElementById('perctext');
     var duplicatePercentages = `${item.translated}%✏️ ${item.approved}%✅`;
-    perctext.innerHTML += `<div>${item.title}: ${duplicatePercentages}</div>`;
+    perctext.innerHTML += `<div>${title}: ${duplicatePercentages}</div>`;
 }
+
+
 
 function copyTextToClipboard() {
     // Get the text content of the perctext block
