@@ -1,5 +1,13 @@
 # PatsiukUI
 
+Used tools, libraries and languages:<br>
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white)
+![JSQ](https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white)
+![HTML](https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS-239120?&style=for-the-badge&logo=css3&logoColor=white)
+<br>
+Hosted by Netlify <br> [![Netlify Status](https://api.netlify.com/api/v1/badges/2cdefe4e-57cb-4ba2-a397-374973534931/deploy-status)](https://app.netlify.com/sites/patsiukui/deploys)
+
 ## Overview
 PatsiukUI is an interactive translation tool designed to assist translators and localization communities in their work. This tool provides advanced customization options and translation memory features to streamline the translation process.
 
